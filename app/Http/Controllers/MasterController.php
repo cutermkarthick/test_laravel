@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use App\Http\Models\ProcessSheet;
 use View;
 
@@ -12,10 +13,50 @@ class MasterController extends Controller
 {
 	public function pssummary($value='')
 	{
-		$newps = new ProcessSheet();
+		if (Input::has("page")) {
+            $data = Input::all();
+        }else{
+        	// echo "string"; exit;
+        }
 
-		if (!empty($_POST)) {
-			
+		$newps = new ProcessSheet();
+		$rowsPerPage =10;
+		$pageNum = 1;
+		$offset = ($pageNum - 1) * $rowsPerPage;
+
+		if (!empty($_GET)) 
+		{
+
+      		$bom_match = $_GET['bom'];
+	        if ( isset ( $_GET['oper'] ) ) 
+	        {
+	          $oper = $_GET['oper'];
+	        }
+	        if ($oper == 'like') 
+	        {
+	          $bom = "'" . $_GET['bom'] . "%" . "'";
+	        }
+	        else 
+	        {
+	          $bom = "'" . $_GET['bom'] . "'";
+	        }
+
+	       	$cond0 = "b.bomnum" . " " . $oper . " " . $bom;  
+
+	        $condition1 = $_GET['condition'];
+		  	$sval = $condition1;
+			if($condition1 == 'All')
+			{
+			   $cond1 = " b.status IN('Active' ,'Pending', 'Inactive', 'Cancelled')" ;
+			}
+			else 
+			{
+				$cond1 = " b.status ='$condition1'" ;
+		  	}
+	      	
+	      	$oper = $_GET['oper'];
+	      	$cond = $cond0 . ' and ' . $cond1 ;
+
 		}else{
 			$bom_match = '';
 			$oper = "like";
@@ -26,8 +67,9 @@ class MasterController extends Controller
 			$cond = $cond0 . ' and ' . $cond1 ;
 		}
 
-		$data['results'] = $newps->getps_summary($cond);
 
+
+		$data['results'] = $newps->getps_summary($cond,$offset,$rowsPerPage);
 		foreach ($data['results'] as $key => $value) {
 			$d=substr($value->bomdate,8,2);
             $m=substr($value->bomdate,5,2);
@@ -36,6 +78,54 @@ class MasterController extends Controller
             $psdate=date("M j, Y",$x);
 			$data['results'][$key]->psdate = $psdate;
 		}
+
+		$data['numrows'] = $newps->getPScount($cond,$offset,$rowsPerPage);
+		$numrows = $data['numrows'][0]->numrows;
+		$maxPage = ceil($numrows/$rowsPerPage);
+		$data['oper'] = $oper;
+		$data['sval'] = $sval;
+		$data['bom'] = $bom_match;
+		
+		if (isset($_GET['page']))
+		{
+		    $pageNum = $_REQUEST['page'];
+		}
+		else
+		{
+			$totpages = $maxPage;
+		}
+		if (isset($_GET['totpages']))
+		{
+		    $totpages = $_GET['totpages'];
+		}
+
+		if ($pageNum > 1)
+		{
+		    $data['page'] = $pageNum - 1;
+		    $page = $pageNum - 1;
+		    $data['prev'] = " <a href=\"test_laravel/bom/?page=$page&totpages=$totpages&bom=$bom_match&oper=$oper&condition=$sval\">[Prev]</a> ";
+			$data['first'] = " <a href=\"test_laravel/bom/?page=1&totpages=$totpages&bom=$bom_match&oper=$oper&condition=$sval\">[First Page]</a> ";
+		}
+		else
+		{
+		    $data['prev']  = ' [Prev] ';      
+		    $data['first'] = ' [First Page] ';
+		}
+		if ($pageNum < $totpages)
+		{
+		    $page = $pageNum + 1;
+		    $data['page'] = $pageNum + 1;
+		    $data['next'] = " <a href=\"test_laravel/bom/?page=$page&totpages=$totpages&bom=$bom_match&oper=$oper&condition=$sval\">[Next]</a> ";
+    		$data['last'] = "<a href=\"test_laravel/bom/?page=$totpages&totpages=$totpages&bom=$bom_match&oper=$oper&condition=$sval\">[Last Page]</a> ";
+		}
+		else
+		{
+		    $next = ' [Next] ';      
+		    $last = ' [Last Page] '; 
+		}
+		
+		$data['pageNum'] = $pageNum;
+		$data['totpages'] = $totpages;
 		
 		return View::make('process_sheet.ps')->with($data);
 	}

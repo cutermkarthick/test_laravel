@@ -31,6 +31,8 @@ Route::post('/loginuser', ['as' => 'checkuser' , 'uses'=>'LoginController@proces
 
 Route::get('/bom' , 'MasterController@pssummary');
 
+Route::get('/bom/data' , 'MasterController@pssummary');
+
 Route::get('/psdetails/recnum/{recnum}' , ['as' => 'ps_details' , 'uses'=>'MasterController@psdetails']);
 
 Route::get('/editps/recnum/{recnum}' , ['as' => 'ps_edit' , 'uses'=>'MasterController@editps']);

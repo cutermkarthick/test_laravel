@@ -60,7 +60,7 @@ class LoginController extends Controller
 			}
 			else
 			{
-				// return \Redirect::to('/worderSummary');
+				return \Redirect::to('/bom');
 			}
 		}
 

@@ -6,9 +6,11 @@ use DB;
 
 class ProcessSheet extends Model
 {
-	public function getps_summary($cond)
+	public function getps_summary($cond,$argoffset,$arglimit)
 	{
-		
+		$offset = $argoffset;
+        $limit = $arglimit;
+
 		$result = DB::table('bom as b')
 					->join('employee as e', 'e.recnum', '=', 'b.bom2seowner')
 					->select('b.bomnum', 'b.bomdate', 'b.bomdescr',
@@ -16,11 +18,24 @@ class ProcessSheet extends Model
 							  'b.status','b.makebuy','b.workcenter',
 							  'e.fname', 'b.issue')
 					->orderBy('b.bomnum', 'desc')
-					->offset(0)
-            		->limit(10)
+					->offset($offset)
+            		->limit($limit)
 					->get();
 
 		return $result;
+	}
+
+	public function getPScount($cond, $argoffset,$arglimit)
+	{
+		$offset = $argoffset;
+        $limit = $arglimit;
+
+        $result = DB::table('bom as b')
+        			->join('employee as e','b.bom2seowner','=','e.recnum')
+        			->select(DB::raw('count(*) as numrows'))
+        			->get();
+        return $result;
+		
 	}
 
 	public function getPSDetails($recnum)
