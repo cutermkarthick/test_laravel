@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Models\Login;
+use Illuminate\Support\Facades\Session;
 use View;
 
 class LoginController extends Controller
@@ -47,7 +48,6 @@ class LoginController extends Controller
 		session(['userrecnum' => $user_details['userrecnum']]);
 		session(['department' => $user_details['department']]);
 
-		
 
 		$usertype = $user_details['usertype'];
 		$department = $user_details['department'];
@@ -67,7 +67,16 @@ class LoginController extends Controller
 		echo "<pre>";
 		print_r($user_details); exit;
 	}
+
+	public function logout()
+	{
+		Session::flush();
+		return redirect('/');
+	}
+	
 }
+
+
 
 
 

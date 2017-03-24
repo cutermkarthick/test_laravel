@@ -1,19 +1,42 @@
 @extends('newtemp.main')
 @section('content')
 	<?php 
-		 $userid = session('username');
-		 $userid = Session::get('username');
-
+		 $userid = session('user');
 		 $myrow = $details[0];
 	?>
-
+		<script src="{{ asset('assets/scripts/bom.js') }} "></script>
+		<script type="text/javascript">
+			var printurl = '{!! route("ps_print", ["recnum" => $myrow->recnum]); !!}';
+		</script>
+		<table width=100% border=0 cellspacing="0" cellpadding="0" >
+			<tr>
+				<td ><span class="welcome"><b>Welcome <?php echo $userid?></b></span></td>
+				<td align="right">&nbsp;<a href="{{route('logout')}}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image16','','{{ asset('assets/images/logout_mo.gif') }}',1)"><img name="Image16" border="0" src="{{ asset('assets/images/logout.gif') }}"></a></td>
+			 </tr>
+		</table>
 
 		<table width="100%" border="0" cellspacing="1" cellpadding="6">
 			<tr>
 				<td><span class="heading"><b>Process Sheet Details</b></span></td>
 				<td align="right">
-					<a class="btn btn-default" href="{!! route('ps_edit', ['recnum'=> $myrow->recnum]) !!} " role="button">Edit</a>
-    			<a class="btn btn-default" href="{!! route('ps_copy', ['recnum'=> $myrow->recnum]) !!} " role="button">Copy ps</a>
+					@if($userid  == "atpl" || $userid  == "qa" || $userid  == "eng" || $userid  == "prakash")
+						@if($myrow->status == "Pending" || $myrow->status == "Active")
+							<a class="btn btn-default" href="{!! route('ps_edit', ['recnum'=> $myrow->recnum]) !!} " role="button">Edit</a>
+						@endif
+					@endif
+
+					@if($userid  == "atpl")
+
+						@if($myrow->approved == "yes" && $myrow->qa_approved == "yes")
+							<a class="btn btn-default" onclick="javascript: printBom({{$myrow->recnum}})"   role="button">Print</a>
+						@endif
+							<a class="btn btn-default" href="{!! route('ps_copy', ['recnum'=> $myrow->recnum]) !!} " role="button">Copy ps</a>
+					@endif
+
+					@if($userid  == "eng" || $userid  == "prakash")
+						<a class="btn btn-default" href="{!! route('ps_copy', ['recnum'=> $myrow->recnum]) !!} " role="button">Copy ps</a>
+					@endif
+    				
 				</td>
 			</tr>
 		</table>
@@ -28,7 +51,7 @@
 					<td><span class="labeltext"><p align="left">*PS #</p></span></td>
 					<td  ><span class="tabletext"><?php echo $myrow->bomnum; ?></span></td>
 					<td><span class="labeltext"><p align="left">*PS Date</p></font></span></td>
-					<td ><span class="tabletext">{{ $myrow->bomdate }}</span></td>
+					<td ><span class="tabletext"> @if($myrow->bomdate != "0000-00-00") {{ Carbon\Carbon::parse($myrow->bomdate)->format('M d, Y') }} @endif</span></td>
 				</tr>
 
 				<tr bgcolor="#FFFFFF">
@@ -55,7 +78,7 @@
 					<td><span class="labeltext"><p align="left">Approved By</p></font></span></td>
 					<td ><span class="tabletext"><?php echo $myrow->approved_by; ?></span></td>
 					<td><span class="labeltext"><p align="left">Approved Date</p></font></span></td>
-					<td ><span class="tabletext">{{ $myrow->app_date }}</span></td>
+					<td ><span class="tabletext"> @if($myrow->app_date != "0000-00-00") {{ Carbon\Carbon::parse($myrow->app_date)->format('M d, Y') }} @endif</span></td>
 
 				</tr>
 
@@ -63,7 +86,7 @@
 					<td><span class="labeltext"><p align="left">QA Approved By</p></font></span></td>
 					<td ><span class="tabletext"><?php echo $myrow->qa_approved_by;?></span></td>
 					<td><span class="labeltext"><p align="left">QA Approved Date</p></font></span></td>
-					<td ><span class="tabletext">{{ $myrow->qa_app_date }}</span></td>
+					<td ><span class="tabletext"> @if($myrow->qa_app_date != "0000-00-00") {{ Carbon\Carbon::parse($myrow->qa_app_date)->format('M d, Y') }} @endif</span></td>
 				</tr>
 
 
@@ -85,9 +108,17 @@
 							</textarea>
 						</td>
 					</tr>
+
+					<tr bgcolor="#EEEFEE">
+						<td colspan=10><span class="heading"><center><b>Process Line Items</b></center></td>
+					</tr>
+
 			</table>
 
+			
+
 			<table id="myTable" width=100% border=0 cellpadding=3 cellspacing=1 bgcolor="#DFDEDF" class="table table-bordered">
+				
 				<tr>
 					<td bgcolor="#EEEFEE" width=2% align="center"><span class="heading"><b>Line</b></span></td>
 					<td bgcolor="#EEEFEE" width=10% align="center"><span class="heading"><b>Description</b></span></td>

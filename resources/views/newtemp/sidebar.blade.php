@@ -46,7 +46,7 @@
 		<ul class="submenu">
 			
 			<li class="">
-				<a href="typography.html">
+				<a href="{{url('bom')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Process Sheet
 				</a>
@@ -55,7 +55,7 @@
 			</li>
 
 			<li class="">
-				<a href="elements.html">
+				<a href="{{url('mrs_summary')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Master Routing
 				</a>
@@ -64,7 +64,7 @@
 			</li>
 
 			<li class="">
-				<a href="buttons.html">
+				<a href="{{url('pinsummary')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					PIN Master
 				</a>
@@ -73,7 +73,7 @@
 			</li>
 
 			<li class="">
-				<a href="content-slider.html">
+				<a href="{{url('stdmaster_summary')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Std Master
 				</a>
@@ -162,7 +162,7 @@
 		<ul class="submenu">
 
 			<li class="">
-				<a href="form-elements-2.html">
+				<a href="{{url('cons_grn')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Cons GRN
 				</a>
@@ -171,7 +171,7 @@
 			</li>
 
 			<li class="">
-				<a href="form-elements-2.html">
+				<a href="{{url('custgrn')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Cust GRN
 				</a>
@@ -195,7 +195,7 @@
 		<ul class="submenu">
 
 			<li class="">
-				<a href="form-elements-2.html">
+				<a href="{{url('testmatrix')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Soln Matrix
 				</a>
@@ -204,7 +204,7 @@
 			</li>
 
 			<li class="">
-				<a href="form-elements-2.html">
+				<a href="{{url('periodic')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Periodic
 				</a>
@@ -216,7 +216,7 @@
 	</li>
 
 	<li class="">
-		<a href="gallery.html">
+		<a href="{{url('requisition')}}">
 			<i class="menu-icon fa fa-picture-o"></i>
 			<span class="menu-text"> Requisition </span>
 		</a>
@@ -225,7 +225,7 @@
 	</li>
 
 	<li class="">
-		<a href="gallery.html">
+		<a href="{{url('mfg')}}">
 			<i class="menu-icon fa fa-picture-o"></i>
 			<span class="menu-text"> MFG </span>
 		</a>
@@ -246,7 +246,7 @@
 		<ul class="submenu">
 
 			<li class="">
-				<a href="form-elements-2.html">
+				<a href="{{url('spmfr')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Airbus
 				</a>
@@ -255,7 +255,7 @@
 			</li>
 
 			<li class="">
-				<a href="form-elements-2.html">
+				<a href="{{url('spmfrb')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Boieng
 				</a>
@@ -264,7 +264,7 @@
 			</li>
 
 			<li class="">
-				<a href="form-elements-2.html">
+				<a href="{{url('spmfro')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Others
 				</a>
@@ -287,7 +287,7 @@
 
 		<ul class="submenu">
 			<li class="">
-				<a href="profile.html">
+				<a href="{{url('fair')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					FAIR
 				</a>
@@ -296,7 +296,7 @@
 			</li>
 
 			<li class="">
-				<a href="inbox.html">
+				<a href="{{url('nc')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					NC
 				</a>
@@ -305,7 +305,7 @@
 			</li>
 
 			<li class="">
-				<a href="pricing.html">
+				<a href="{{url('dispatch')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Dispatch
 				</a>
@@ -314,7 +314,7 @@
 			</li>
 
 			<li class="">
-				<a href="invoice.html">
+				<a href="{{url('form')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Forms
 				</a>
@@ -339,8 +339,18 @@
 		<b class="arrow"></b>
 
 		<ul class="submenu">
+
 			<li class="">
-				<a href="error-404.html">
+				<a href="{{url('accounts')}}">
+					<i class="menu-icon fa fa-caret-right"></i>
+					accounts
+				</a>
+
+				<b class="arrow"></b>
+			</li>
+
+			<li class="">
+				<a href="{{url('contacts')}}" >
 					<i class="menu-icon fa fa-caret-right"></i>
 					Contacts
 				</a>
@@ -349,7 +359,7 @@
 			</li>
 
 			<li class="">
-				<a href="error-500.html">
+				<a href="{{url('invoice')}}">
 					<i class="menu-icon fa fa-caret-right"></i>
 					Invoice
 				</a>

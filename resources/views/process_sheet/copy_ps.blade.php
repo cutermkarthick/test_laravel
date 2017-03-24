@@ -1,16 +1,43 @@
 @extends('newtemp.main')
 @section('content')
 	<?php 
-		$userid = session('username');
-		$userid = Session::get('username');
+		$userid = session('user');
+		$userid = Session::get('user');
 
 		$myrow = $details[0];
 		$today = date('Y-m-d') ;
+
+
 	?>
 
-	{!!  Form::open(['route'=>'submit_copyps' , 'class'=>'form']) !!}
-
+	<table width=100% border=0 cellspacing="0" cellpadding="0" >
+		<tr>
+			<td ><span class="welcome"><b>Welcome <?php echo $userid?></b></span></td>
+			<td align="right">&nbsp;<a href="{{route('logout')}}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image16','','{{ asset('assets/images/logout_mo.gif') }}',1)"><img name="Image16" border="0" src="{{ asset('assets/images/logout.gif') }}"></a></td>
+		 </tr>
+	</table>
+	<br>
+	{!!  Form::open(['route'=>'submit_newps' , 'class'=>'form']) !!}
+	<script type="text/javascript">
+    var tanks= <?php echo json_encode($list_tanks ); ?>;
+ 	</script>
 	<script src="{{ asset('assets/scripts/bom.js') }} "></script>
+	<script type="text/javascript">
+			
+				jQuery(document).ready(function($){
+					$( "#datepicker" ).datepicker({
+										dateFormat: 'yy-mm-dd',
+										autoclose: true,
+										showOtherMonths: true,
+										selectOtherMonths: false,
+
+									});
+
+
+		});
+
+</script>
+
 	<table border=0 bgcolor="#DFDEDF" width=100% cellspacing=1 cellpadding=3 class="table table-bordered">
 		<tr>
 			<td bgcolor="#EEEFEE"  colspan=5 align="center"><span class="heading"><b>General Information</b></span></td>
@@ -21,7 +48,13 @@
 			<td  ><input type="text" size=25  name="bomnum" id="bomnum" value=""  ></span></td>
 
 			<td><span class="labeltext"><p align="left">*PS Date</p></font></span></td>
-			<td><input type="text" name="bomdate" id="bomdate"  size=25 value=""></td>
+			<td>
+				<input type="text" name="bomdate" id="datepicker"  size=25 value="">
+				<span class="" id="datepicker1">
+					<i class="ace-icon fa fa-calendar" id="b_date"></i>
+				</span>
+			</td>
+			<!-- <input type="text" id="datepicker" class="form-control" /> -->
 		</tr>
 
 		<tr bgcolor="#FFFFFF">
@@ -34,10 +67,16 @@
 
     <tr bgcolor="#FFFFFF">
       <td><span class="labeltext"><p align="left">Responsibility</p></font></td>
-      <td><input type="text" name="se"   size=25 value="<?php echo $myrow->fname." ".$myrow->lname ?>">
+      <td>
+      	<input type="text" name="se"   size=25 value="<?php echo $myrow->fname." ".$myrow->lname ?>">
+      	<button type="button" class="btn btn-default" onclick="GetAllEmps1()">Get Employee</button>
+      </td>
       <td><span class="labeltext"><p align="left">Issue</p></font></td>
       <td><input type="text" size=25 name="issue" value="{{ $myrow->issue }}" ></td>
     </tr>
+
+    <input type="hidden" name= "aerecnum"  id= "aerecnum" value="0">
+		<input type="hidden" name= "serecnum" id= "serecnum" value="{{ $myrow->bom2seowner }}">
 
     <tr bgcolor="#DDDEDD">
 				<td colspan=10><span class="heading"><center><b>Add Notes</b></center></td>
@@ -49,6 +88,13 @@
 
 	</table>
 
+	<table>
+    <tr bgcolor="#FFFFFF">
+      	<td colspan=10><a href="javascript:addRow('myTable',document.forms[0].index.value)" ><button type="button" class="btn btn-default" >AddRow</button></a>
+  	</tr>
+  </table>
+  <br>
+  
 	<table id="myTable" width=100% border=0 cellpadding=3 cellspacing=1 bgcolor="#DFDEDF" class="table table-bordered">
 		<tr>
 			<td bgcolor="#EEEFEE" width=2%><span class="heading"><b>Line</b></span></td>
@@ -99,6 +145,11 @@
               $tanknum = "NA";
               $recnum = "0";
            	}
+           	else
+           	{
+           		$tanknum = "NA";
+              $recnum = "";
+           	}
 						?>
 						<tr>
 							<td ><span class="tabletext"><input type="text" id="{{ $linenumber }}"  name="{{ $linenumber }}"  value="{{ $myrowli->line_num }}" size="2%"></td>
@@ -109,7 +160,7 @@
 			       		<select name="{{$ps_tanknum}}" id="{{$ps_tanknum}}" >
 			       			<option value={{$recnum}}  <?php if($recnum == "0"){ echo "selected='selected'";} ?> >{{ $tanknum }} </option>
 			       			@foreach ($list_tanks as $li_tank)
-			       				<option value='{{$li_tank->recnum}}' <?php if($li_tank->recnum == $myrowli->tank_num){ echo "selected= 'selectd'"; } ?> >{{$li_tank->tank_num}}
+			       				<option value='{{$li_tank->recnum}}' <?php if($li_tank->tank_num == $myrowli->tank_num){ echo "selected= 'selectd'"; } ?> >{{$li_tank->tank_num}}
 			       			@endforeach
 			         	</select>
 			        </td>
@@ -151,7 +202,8 @@
 			       	<input type="hidden" name="{{$partrecnum}}" id="{{$partrecnum}}" value="{{$myrowli->link2parts}}">
 			       	<input type="hidden" name="{{$prevlinenumber}}" id="{{$prevlinenumber}}" value="{{$myrowli->line_num}}">
 			       	<input type="hidden" name="{{$lirecnum}}" id="{{$lirecnum}}" value="{{$myrowli->recnum}}">
-			       	<input type="hidden" name="userid" id="userid" value ="atpl">
+			       	<input type="hidden" name="userid" id="userid" value ="{{$userid}}">
+			       	<input type="hidden" name= "pagename" id="pagename" value="copyps">
 						</tr>
 					<?php 
 						$i++;
@@ -239,8 +291,10 @@
 			?>
 
 		<input type="hidden" name="index" id="index" value="{{$i}}">
+		
 	</table>
 
-	<input type="submit" size="60" value="Submit" onclick="javascript: return check_req_fields()"/>
+	<input type="submit" size="60" value="Submit" onclick="javascript: return check_req_fields4New()"/>
 	{!! Form::close() !!}
 @stop
+

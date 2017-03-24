@@ -8,7 +8,7 @@
 
 			<meta name="description" content="overview &amp; stats" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-
+			<meta name="csrf-token" content="{{ csrf_token() }}" />
 			<!-- bootstrap & fontawesome -->
 			<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }} " />
 			<link rel="stylesheet" href="{{ asset('assets/font-awesome/4.5.0/css/font-awesome.min.css') }}" />
@@ -26,6 +26,8 @@
 			<![endif]-->
 			<link rel="stylesheet" href="{{ asset('assets/css/ace-skins.min.css') }} " />
 			<link rel="stylesheet" href="{{ asset('assets/css/ace-rtl.min.css') }} " />
+			<!-- page specific plugin styles -->
+			<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}" />
 
 			<!--[if lte IE 9]>
 			  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
@@ -36,6 +38,12 @@
 			<!-- ace settings handler -->
 			<script src="{{ asset('assets/js/ace-extra.min.js') }} "></script>
 
+			<!-- ace settings handler -->
+			<script src="{{ asset('assets/js/ace-extra.min.js') }} "></script>
+
+			<!--[if !IE]> -->
+			<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }} "></script>
+		
 			<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
 			<!--[if lte IE 8]>
@@ -89,8 +97,7 @@
 
 		<!-- basic scripts -->
 
-		<!--[if !IE]> -->
-		<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }} "></script>
+		
 
 		<!-- <![endif]-->
 
@@ -107,6 +114,7 @@
 		<!--[if lte IE 8]>
 		  <script src="assets/js/excanvas.min.js"></script>
 		<![endif]-->
+		<script src="{{ asset('assets/js/jquery-ui.min.js') }} "></script>
 		<script src="{{ asset('assets/js/jquery-ui.custom.min.js') }} "></script>
 		<script src="{{ asset('assets/js/jquery.ui.touch-punch.min.js') }} "></script>
 		<script src="{{ asset('assets/js/jquery.easypiechart.min.js') }} "></script>
@@ -114,7 +122,7 @@
 		<script src="{{ asset('assets/js/jquery.flot.min.js') }} "></script>
 		<script src="{{ asset('assets/js/jquery.flot.pie.min.js') }} "></script>
 		<script src="{{ asset('assets/js/jquery.flot.resize.min.js') }} "></script>
-		<script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
+		<!-- <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script> -->
 
 		<!-- ace scripts -->
 		<script src="{{ asset('assets/js/ace-elements.min.js') }} "></script>
